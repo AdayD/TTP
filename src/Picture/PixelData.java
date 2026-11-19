@@ -1,6 +1,8 @@
 package Picture;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.util.List;
 
 public class PixelData {
     private String path;
@@ -12,13 +14,6 @@ public class PixelData {
 
     public PixelData() {; // temporal
         System.out.println("Using no file");
-    }
-
-    public void readFile() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(this.file)); // ???? From stackoverflow
-
-        // https://stackoverflow.com/questions/1480398/java-reading-a-file-from-current-directory
-
     }
 
     public byte[] makeTestPicture(int height_total, int width_total) throws IOException {
@@ -35,6 +30,39 @@ public class PixelData {
             picInfo.write(row.toByteArray());
         }
         return picInfo.toByteArray();
+    }
+
+    public List<String> readText() throws FileNotFoundException {
+        List<String> fileC;
+
+        File f = new File("tester.txt");
+
+        try {
+            fileC = Files.readAllLines(f.toPath());
+            System.out.println(fileC);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return fileC;
+
+    }
+
+    public byte[] readBytes() throws IOException {
+        // https://howtodoinjava.com/java/io/read-file-content-into-byte-array/
+
+        File f = new File("test.bmp");
+
+        byte[] content;
+
+        try (InputStream in = new FileInputStream(f)) {
+            content = in.readAllBytes();
+        }
+
+        int allSize = content.length;
+        System.out.println(allSize);
+
+        return content;
     }
 
     /**

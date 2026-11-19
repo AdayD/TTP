@@ -1,12 +1,9 @@
 package Picture;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class MakePicture {
-    /* TODO
+    /*  TO DO
      *  Read Files
      *  Split File
      *  Encode to picture
@@ -18,6 +15,7 @@ public class MakePicture {
      */
     public int HEIGHT_TOTAL;
     public int WIDTH_TOTAL;
+    PixelData pd = new PixelData();
 
     public MakePicture(int HEIGHT_TOTAL, int WIDTH_TOTAL) {
         this.HEIGHT_TOTAL = HEIGHT_TOTAL;
@@ -31,9 +29,7 @@ public class MakePicture {
      * @throws IOException
      */
     public void makeFile() throws IOException {
-
         File picture = new File("test.bmp");
-        PixelData pd = new PixelData();
 
         // https://stackoverflow.com/questions/10061029/how-to-make-bmp-image-from-pixel-byte-array-in-java
 
@@ -48,7 +44,16 @@ public class MakePicture {
         try(FileOutputStream outputStream = new FileOutputStream(picture)){
             outputStream.write(picData.toByteArray());
         }
+
         picData.close();
+    }
+
+    public void readTextFile() throws FileNotFoundException {
+        pd.readText();
+    }
+
+    public void readBinFile() throws IOException {
+        pd.readBytes();
     }
 
 }
