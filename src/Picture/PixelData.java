@@ -12,7 +12,7 @@ public class PixelData {
         this.file = f;
     }
 
-    public PixelData() {; // temporal
+    public PixelData() { // temporal
         System.out.println("Using no file");
     }
 
