@@ -1,25 +1,28 @@
 package Picture;
 
 import java.io.*;
+import java.nio.file.Path;
 
 public class MakePicture {
+
     /*  TO DO
      *  Read Files
-     *  Split File
      *  Encode to picture
      */
+    private File fileToRead;
 
-    /*
-     *  HEIGHT_TOTAL AND WIDTH_TOTAL SHOULD BE ASSIGNED FROM THE READING OF A FILE BUT WITH "STANDARDS"
-     *  LESS THAN 1280 X 720 BUT MORE THAN 800 X 600 USE 1280 X 720 AND SO ON
+    /* TO DO
+     * Set H_T and W_T with file content
      */
     public int HEIGHT_TOTAL;
     public int WIDTH_TOTAL;
     PixelData pd = new PixelData();
+    FileData fd = new FileData();
 
-    public MakePicture(int HEIGHT_TOTAL, int WIDTH_TOTAL) {
+    public MakePicture(int HEIGHT_TOTAL, int WIDTH_TOTAL,File fileToRead) {
         this.HEIGHT_TOTAL = HEIGHT_TOTAL;
         this.WIDTH_TOTAL = WIDTH_TOTAL;
+        this.fileToRead = fileToRead;
     }
 
     /**
@@ -48,12 +51,24 @@ public class MakePicture {
         picData.close();
     }
 
+    /**
+     * Reads files that can be viewed as a text file
+     * source code, txt, md, json, ...
+     * @throws FileNotFoundException
+     */
     public void readTextFile() throws FileNotFoundException {
-        pd.readText();
+        fd.fileSetter(this.fileToRead);
+        fd.readText();
     }
 
+    /**
+     * Reads bytes of a File
+     * @throws IOException
+     */
     public void readBinFile() throws IOException {
-        pd.readBytes();
+        fd.fileSetter(this.fileToRead);
+        fd.readBytes();
+        System.out.println(fd.readBytes().length);
     }
 
 }

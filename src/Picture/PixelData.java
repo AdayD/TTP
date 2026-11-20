@@ -1,21 +1,26 @@
 package Picture;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.util.List;
 
 public class PixelData {
-    private String path;
-    private File file;
-
-    public PixelData(File f) {
-        this.file = f;
-    }
 
     public PixelData() { // temporal
         System.out.println("Using no file");
     }
 
+    /**
+     * USED FOR TESTING!!!
+     * Makes a full white picture
+     * TO DO
+     *  - Change to a while (Use EOF or line == null)
+     *      // Maybe first get h_t and w_t from file and modify current version for when file size its odd -> 10684431 / 2 = 5.342.215,5 CANT BE ,5!!!! :(
+     *      // Add a complete new row to fix it? -> GET FILE SIZE -> CHECK DIVISION -> IF NEEDED ADD ONE MORE TO HEIGHT
+     *  - Use FileData to write the contents of a file
+     * @param height_total
+     * @param width_total
+     * @return
+     * @throws IOException
+     */
     public byte[] makeTestPicture(int height_total, int width_total) throws IOException {
         ByteArrayOutputStream picInfo = new ByteArrayOutputStream();
 
@@ -32,42 +37,13 @@ public class PixelData {
         return picInfo.toByteArray();
     }
 
-    public List<String> readText() throws FileNotFoundException {
-        List<String> fileC;
-
-        File f = new File("tester.txt");
-
-        try {
-            fileC = Files.readAllLines(f.toPath());
-            System.out.println(fileC);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return fileC;
-
-    }
-
-    public byte[] readBytes() throws IOException {
-        // https://howtodoinjava.com/java/io/read-file-content-into-byte-array/
-
-        File f = new File("test.bmp");
-
-        byte[] content;
-
-        try (InputStream in = new FileInputStream(f)) {
-            content = in.readAllBytes();
-        }
-
-        int allSize = content.length;
-        System.out.println(allSize);
-
-        return content;
-    }
 
     /**
-     *
-     * @return Array of bytes with the header for the bmp file
+     * Makes the Header for the file
+     * Takes width and height to match with the picture
+     * @param height_total Height of the picture
+     * @param width_total Width of the picture
+     * @return Array of bytes with the header for the bmp file@return
      */
     public byte[] makeHeader(int height_total, int width_total) {
         // HEADER
