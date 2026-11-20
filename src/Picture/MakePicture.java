@@ -1,6 +1,7 @@
 package Picture;
 
 import java.io.*;
+import java.util.List;
 
 public class MakePicture {
 
@@ -9,6 +10,7 @@ public class MakePicture {
      *  Encode to picture
      */
     private File fileToRead;
+    private byte[] info;
 
     /* TO DO
      * Set H_T and W_T with file content
@@ -21,6 +23,10 @@ public class MakePicture {
     public MakePicture(int HEIGHT_TOTAL, int WIDTH_TOTAL,File fileToRead) {
         this.HEIGHT_TOTAL = HEIGHT_TOTAL;
         this.WIDTH_TOTAL = WIDTH_TOTAL;
+        this.fileToRead = fileToRead;
+    }
+
+    public MakePicture(File fileToRead) {
         this.fileToRead = fileToRead;
     }
 
@@ -37,12 +43,14 @@ public class MakePicture {
 
         ByteArrayOutputStream picData = new ByteArrayOutputStream();
 
-        byte[] header = pd.makeHeader(this.HEIGHT_TOTAL,this.WIDTH_TOTAL); // CREATES A HEADER WITH A SET RES
+        byte[] header = PixelData.makeHeader(this.HEIGHT_TOTAL,this.WIDTH_TOTAL); // CREATES A HEADER WITH A SET RES
         picData.write(header); // ADDS THE HEADER TO THE OutputStream
 
-        byte[] info = pd.makeTestPicture(this.HEIGHT_TOTAL,this.WIDTH_TOTAL);
-        picData.write(info);
+        byte[] infoPic = pd.makeTestPicture(this.HEIGHT_TOTAL,this.WIDTH_TOTAL,info);
+        picData.write(infoPic);
 
+        //byte[] info = pd.makeTestPicture(this.HEIGHT_TOTAL,this.WIDTH_TOTAL);
+        //picData.write(info);
         try(FileOutputStream outputStream = new FileOutputStream(picture)){
             outputStream.write(picData.toByteArray());
         }
@@ -51,23 +59,37 @@ public class MakePicture {
     }
 
     /**
-     * Reads files that can be viewed as a text file
-     * source code, txt, md, json, ...
-     * @throws FileNotFoundException
+     * Reads a file, both plain text and binary files
+     * Uses FileData
+     * Tries to read the file as it is plain text
+     * If it's a binary file it will get an error and try to read the bytes instead
      */
-    public void readTextFile() throws FileNotFoundException {
+    public void readFile() throws IOException {
         fd.fileSetter(this.fileToRead);
-        fd.readText();
-    }
+        int size = 0;
 
-    /**
-     * Reads bytes of a File
-     * @throws IOException
-     */
-    public void readBinFile() throws IOException {
-        fd.fileSetter(this.fileToRead);
-        fd.readBytes();
-        System.out.println(fd.readBytes().length);
-    }
+        try {
+            List<String> plainText = fd.readText();
 
+            if (plainText == null) {
+                byte[] byteData = fd.readBytes();
+                if (byteData != null) {
+                    System.out.println(byteData.length);
+                    size = byteData.length;
+                    this.info = byteData;
+                }
+            } else {
+                System.out.println(plainText);
+                size = plainText.size();
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        this.WIDTH_TOTAL = 1280;
+        this.HEIGHT_TOTAL = 720;
+        makeFile();
+    }
 }

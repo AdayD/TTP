@@ -17,6 +17,7 @@ public class FileData {
         this.fileToRead = f;
     }
 
+
     /**
      * For plain text files
      * @return List of Strings with the file content
@@ -28,7 +29,7 @@ public class FileData {
         try {
             fileC = Files.readAllLines(this.fileToRead.toPath());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return null;
         }
 
         return fileC;
@@ -46,6 +47,8 @@ public class FileData {
 
         try (InputStream in = new FileInputStream(this.fileToRead)) {
             content = in.readAllBytes();
+        } catch (IOException e) {
+            return null;
         }
 
         return content;
