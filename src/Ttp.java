@@ -9,6 +9,6 @@ public class Ttp {
      * Need to mark the end of the file (or maybe end of file == end of picture)
      */
     void main() throws IOException {
-        MainWindow w = new MainWindow();
+        new MainWindow();
     }
 }
