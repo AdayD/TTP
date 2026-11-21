@@ -1,7 +1,5 @@
-import Picture.MakePicture;
 import Window.MainWindow;
 
-import java.io.File;
 import java.io.IOException;
 
 public class Ttp {
