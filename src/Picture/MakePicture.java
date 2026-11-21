@@ -24,6 +24,13 @@ public class MakePicture {
         this.HEIGHT_TOTAL = HEIGHT_TOTAL;
         this.WIDTH_TOTAL = WIDTH_TOTAL;
         this.fileToRead = fileToRead;
+
+        try {
+            readFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public MakePicture(File fileToRead) {
@@ -49,8 +56,6 @@ public class MakePicture {
         byte[] infoPic = pd.makeTestPicture(this.HEIGHT_TOTAL,this.WIDTH_TOTAL,info);
         picData.write(infoPic);
 
-        //byte[] info = pd.makeTestPicture(this.HEIGHT_TOTAL,this.WIDTH_TOTAL);
-        //picData.write(info);
         try(FileOutputStream outputStream = new FileOutputStream(picture)){
             outputStream.write(picData.toByteArray());
         }
@@ -74,8 +79,7 @@ public class MakePicture {
             if (plainText == null) {
                 byte[] byteData = fd.readBytes();
                 if (byteData != null) {
-                    System.out.println(byteData.length);
-                    size = byteData.length;
+                    System.out.println("[BYTES] " + byteData.length);
                     this.info = byteData;
                 }
             } else {
@@ -90,6 +94,5 @@ public class MakePicture {
 
         this.WIDTH_TOTAL = 1280;
         this.HEIGHT_TOTAL = 720;
-        makeFile();
     }
 }

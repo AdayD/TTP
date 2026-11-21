@@ -1,4 +1,5 @@
 import Picture.MakePicture;
+import Window.MainWindow;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,11 +11,6 @@ public class Ttp {
      * Need to mark the end of the file (or maybe end of file == end of picture)
      */
     void main() throws IOException {
-        MakePicture mp = new MakePicture(new File("testFile.exe"));
-        //mp.makeFile();
-        mp.readFile();
-
-        //mp.readTextFile();
-
+        MainWindow w = new MainWindow();
     }
 }

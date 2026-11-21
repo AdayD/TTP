@@ -23,7 +23,7 @@ public class PixelData {
      */
     public byte[] makeTestPicture(int height_total, int width_total, byte[] info) throws IOException {
         ByteArrayOutputStream picInfo = new ByteArrayOutputStream();
-        System.out.println(height_total + " " + width_total);
+        System.out.println("[RES] " + height_total + " " + width_total);
         int cInfo = 0;
 
         for ( int height = 0; height < height_total; height++) {
@@ -39,7 +39,6 @@ public class PixelData {
                     row.write(254);
                     row.write(254);
                     row.write(254);
-                    System.out.println("yay");
                 }
                 cInfo++;
             }
