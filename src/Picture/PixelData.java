@@ -4,10 +4,6 @@ import java.io.*;
 
 public class PixelData {
 
-    public PixelData() { // temporal
-        System.out.println("Using no file");
-    }
-
     /**
      * USED FOR TESTING!!!
      * Makes a full white picture
@@ -33,15 +29,25 @@ public class PixelData {
 
                 if(cInfo < info.length) { // NEED A BETTER WAY TO DO THIS!!!
                     row.write(info[cInfo]);
-                    row.write(254);
-                    row.write(254);
+                    row.write(0);
+                    row.write(0);
                 } else {
+                    System.out.println("yay");
                     row.write(254);
                     row.write(254);
                     row.write(254);
                 }
                 cInfo++;
             }
+
+            // Padding BMP -> AI CODE
+            int padding = (4 - (width_total * 3) % 4) % 4; // BMP NEEDS THE ROW TO BE MULTIPLE OF 4
+            System.out.println(padding);
+
+            for (int i = 0; i < padding; i++) {
+                row.write(0);
+            }
+            // END OF AI CODE
 
             picInfo.write(row.toByteArray());
         }
@@ -83,15 +89,29 @@ public class PixelData {
         heightB[2] = (byte) (height_total >> 16 & 0xff);
         heightB[3] = (byte) (height_total >> 24 & 0xff);
 
+        int rowSize = ((width_total * 3 + 3) / 4) * 4; // AI CODE -> FIX THE HEADER
+        int imageSize = rowSize * Math.abs(height_total);
+        final int BMP_HEADERSIZE = 54;
+        int fileSize = BMP_HEADERSIZE + imageSize;
+
+        byte[] fileSizeB = new byte[4];   // INFO SIZE -> FULL SIZE OF PICTURE W/ HEADER
+        byte[] imageSizeB = new byte[4]; // INFO IMAGE_SIZE -> FULL SIZE OF PIXELS
+        // END OF AI GENERATED CODE
+
+        for (int i = 0; i < 4; i++) {
+            fileSizeB[i] = (byte) (fileSize >>> (8 * i));
+            imageSizeB[i] = (byte) (imageSize >>> (8 * i));
+        }
+
         return new byte[]{
                 // FILE HEADER
                 (byte) 0x42, // B
                 (byte) 0x4D, // M
 
-                (byte) 0x36,
-                (byte) 0x30,
-                (byte) 0x2A,
-                (byte) 0x00,
+                fileSizeB[0], // ADDED WITH AI TO FIX THE HEADER
+                fileSizeB[1],
+                fileSizeB[2],
+                fileSizeB[3], // END OF AI CODE
                 (byte) 0x00,
                 (byte) 0x00,
                 (byte) 0x00,
@@ -124,10 +144,12 @@ public class PixelData {
                 (byte) 0x00,
                 (byte) 0x00,
                 (byte) 0x00,
-                (byte) 0x30,
-                (byte) 0x2A,
-                (byte) 0x00,
-                (byte) 0x00,
+
+                imageSizeB[0], // ADDED WITH AI TO FIX THE HEADER
+                imageSizeB[1],
+                imageSizeB[2],
+                imageSizeB[3], // END OF AI CODE
+
                 (byte) 0x00,
                 (byte) 0x00,
                 (byte) 0x00,

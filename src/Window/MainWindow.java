@@ -20,7 +20,7 @@ public class MainWindow extends JFrame {
 
                 if (usrInput == JFileChooser.APPROVE_OPTION) {
                     File f = fc.getSelectedFile();
-                    MakePicture mp = new MakePicture(720,1280,f);
+                    MakePicture mp = new MakePicture(f);
                     try {
                         mp.makeFile();
                     } catch (IOException e) {

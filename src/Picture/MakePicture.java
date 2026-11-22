@@ -20,12 +20,11 @@ public class MakePicture {
     PixelData pd = new PixelData();
     FileData fd = new FileData();
 
-    public MakePicture(int HEIGHT_TOTAL, int WIDTH_TOTAL,File fileToRead) {
-        this.HEIGHT_TOTAL = HEIGHT_TOTAL;
-        this.WIDTH_TOTAL = WIDTH_TOTAL;
+    public MakePicture(File fileToRead) {
         this.fileToRead = fileToRead;
 
         try {
+            setPicSize(this.fileToRead.length());
             readFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -33,8 +32,9 @@ public class MakePicture {
 
     }
 
-    public MakePicture(File fileToRead) {
-        this.fileToRead = fileToRead;
+    private void setPicSize(long size) {
+        this.WIDTH_TOTAL = (int) Math.ceil(Math.sqrt(size));
+        this.HEIGHT_TOTAL = (int) Math.ceil((double) size / this.WIDTH_TOTAL);
     }
 
     /**
@@ -71,7 +71,6 @@ public class MakePicture {
      */
     public void readFile() throws IOException {
         fd.fileSetter(this.fileToRead);
-        int size = 0;
 
         try {
             List<String> plainText = fd.readText();
@@ -84,15 +83,11 @@ public class MakePicture {
                 }
             } else {
                 System.out.println(plainText);
-                size = plainText.size();
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        this.WIDTH_TOTAL = 1280;
-        this.HEIGHT_TOTAL = 720;
     }
 }
